@@ -1,9 +1,9 @@
 ---
-- name: Deploy app
+- name: Deploy flask app
   hosts: localhost
-  remote_user: "{{ TARGET_USER }}"
+  become: yes
   vars:
-    app_name: myapp
+    app_name: flask-app
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
@@ -37,7 +37,7 @@
 
    - name: Create systemd service for Docker container
      copy:
-       dest: "/etc/sustemd/system/{{ app_name }}.service"
+       dest: "/etc/systemd/system/{{ app_name }}.service"
        content: |
          [Unit]
          Description={{ app_name }} Container
