@@ -20,6 +20,8 @@ pipeline {
         	steps {
         		ansiblePlaybook(
         			installation: 'ansible',
+        			become: true,
+        			disableHostKeyChecking: true,
         			playbook: 'deploy.yml',
         			inventory: 'target,',
         			extraVars: [
@@ -28,7 +30,7 @@ pipeline {
         				TARGET_PATH: "${env.TARGET_PATH}",
         				DOCKER_IMAGE: "${env.DOCKER_IMAGE}"
         			],
-        			credentialsId: 'ansible_pass'
+        			vaultCredentialsId: 'ansible_pass'
         		)
         	}
         }
