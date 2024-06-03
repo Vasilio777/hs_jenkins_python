@@ -18,17 +18,17 @@
        state: directory
        
    - name: Pull Docker image
-     docker_image:
+     community.docker.docker_image:
        name: "{{ DOCKER_IMAGE }}"
        source: pull
 
    - name: Stop and remove old container
-     docker_container:
+     community.docker.docker_container:
        name: "{{ app_name }}"
        state: absent
      
    - name: Run new container
-     docker_container:
+     community.docker.docker_container:
        name: "{{ app_name }}"
        image: "{{ DOCKER_IMAGE }}"
        state: started
