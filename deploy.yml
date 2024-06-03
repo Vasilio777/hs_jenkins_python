@@ -1,0 +1,63 @@
+---
+- name: Deploy app
+  hosts: localhost
+  remote_user: "{{ TARGET_USER }}"
+  vars:
+    app_name: myapp
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+   - name: Clean target repo
+     file:
+       path: "{{ TARGET_PATH }}"
+       state: absent
+
+   - name: Create target repo
+     file:
+       path: "{{ TARGET_PATH }}"
+       state: directory
+       
+   - name: Pull Docker image
+     docker_image:
+       name: "{{ DOCKER_IMAGE }}"
+       source: pull
+
+   - name: Stop and remove old container
+     docker_container:
+       name: "{{ app_name }}"
+       state: absent
+     
+   - name: Run new container
+     docker_container:
+       name: "{{ app_name }}"
+       image: "{{ DOCKER_IMAGE }}"
+       state: started
+       ports:
+         - "4444:4444"
+
+   - name: Create systemd service for Docker container
+     copy:
+       dest: "/etc/sustemd/system/{{ app_name }}.service"
+       content: |
+         [Unit]
+         Description={{ app_name }} Container
+         After=docker.service
+         Requires=docker.service
+
+         [Service]
+         Restart=always
+         ExecStart=/usr/bin/docker run --rm --name {{ app_name }} -p 4444:4444 {{ DOCKER_IMAGE }}
+         ExecStop=/usr/bin/docker stop {{ app_name }}
+
+         [Install]
+         WantedBy=multi-user.target
+
+   - name: Reload systemd to recognize the new service
+     command: systemctl daemon-reload
+
+   - name: Ensure service is enabled
+     systemd:
+       name: "{{ app_name }}"
+       enabled: yes
+       state: started
+     
