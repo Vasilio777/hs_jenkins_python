@@ -33,31 +33,7 @@
        state: started
        ports:
          - "4444:4444"
-
-   - name: Create systemd service for Docker container
-     copy:
-       dest: "/etc/systemd/system/{{ app_name }}.service"
-       content: |
-         [Unit]
-         Description={{ app_name }} Container
-         After=docker.service
-         Requires=docker.service
-
-         [Service]
-         Restart=always
-         ExecStart=/usr/bin/docker run --rm --name {{ app_name }} -p 4444:4444 {{ DOCKER_IMAGE }}
-         ExecStop=/usr/bin/docker stop {{ app_name }}
-
-         [Install]
-         WantedBy=multi-user.target
-
-   - name: Reload systemd to recognize the new service
-     command: systemctl daemon-reload
-
-   - name: Ensure service is enabled
-     systemd:
-       name: "{{ app_name }}"
-       enabled: yes
-       state: started
-     
-
+   - name: Check health
+     shell: |
+       sleep 10
+       curl -f http://localhost:4444/api || exit 1

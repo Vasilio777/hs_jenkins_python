@@ -10,7 +10,7 @@ pipeline {
 
 		stage('Push Docker Image') {
 			steps {
-				withDockerRegistry([url: '', credentialsId: 'docker-credentials-id']) {
+				withDockerRegistry([url: 'https://ttl.sh/', credentialsId: 'docker-credentials-id']) {
 					sh "docker push ${env.DOCKER_IMAGE}"
 				}
 			}
