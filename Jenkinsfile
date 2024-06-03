@@ -4,15 +4,13 @@ pipeline {
     stages {
 		stage('Build') {
 			steps {
-				sh "docker build -t ${env.DOCKER_IMAGE} ."
+				sh "docker build -t ttl.sh/${env.DOCKER_IMAGE}:1h ."
 			}
 		}
 
 		stage('Push Docker Image') {
 			steps {
-				withDockerRegistry([url: 'https://ttl.sh/', credentialsId: 'docker-credentials-id']) {
-					sh "docker push ${env.DOCKER_IMAGE}"
-				}
+				sh "docker push ttl.sh/${env.DOCKER_IMAGE}:1h"
 			}
 		}
 		

@@ -18,7 +18,7 @@
        
    - name: Pull Docker image
      community.docker.docker_image:
-       name: "{{ DOCKER_IMAGE }}"
+       name: "ttl.sh/{{ DOCKER_IMAGE }}"
        source: pull
 
    - name: Stop and remove old container
@@ -29,10 +29,11 @@
    - name: Run new container
      community.docker.docker_container:
        name: "{{ app_name }}"
-       image: "{{ DOCKER_IMAGE }}"
+       image: "ttl.sh/{{ DOCKER_IMAGE }}"
        state: started
        ports:
          - "4444:4444"
+         
    - name: Check health
      shell: |
        sleep 10
