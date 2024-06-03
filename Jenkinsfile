@@ -20,7 +20,6 @@ pipeline {
         	steps {
         		ansiblePlaybook(
         			installation: 'ansible',
-        			become: true,
         			disableHostKeyChecking: true,
         			playbook: 'deploy.yml',
         			inventory: 'target,',
