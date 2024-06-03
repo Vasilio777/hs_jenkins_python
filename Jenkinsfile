@@ -28,7 +28,7 @@ pipeline {
         				TARGET_PATH: "${env.TARGET_PATH}",
         				DOCKER_IMAGE: "${env.DOCKER_IMAGE}"
         			],
-        			credentialsId: 'send_artefact'
+        			credentialsId: 'ansible_pass'
         		)
         	}
         }
