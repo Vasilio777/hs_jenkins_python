@@ -19,10 +19,11 @@ pipeline {
         stage('Deploy') {
         	steps {
         		ansiblePlaybook(
+        			becomeUser: 'vagrant',
         			installation: 'ansible',
         			disableHostKeyChecking: true,
         			playbook: 'deploy.yml',
-        			inventory: 'target,',
+        			inventory: 'inventory',
         			extraVars: [
         				TARGET_HOST: "${env.TARGET_HOST}",
         				TARGET_USER: "${env.TARGET_USER}",
