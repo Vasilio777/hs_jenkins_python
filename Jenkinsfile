@@ -4,13 +4,13 @@ pipeline {
     stages {
 		stage('Build') {
 			steps {
-				sh "docker build -t ttl.sh/${env.TTL_DOCKER_IMAGE}:1h ."
+				sh "docker build -t ${env.TTL_DOCKER_IMAGE}:1h ."
 			}
 		}
 
 		stage('Push Docker Image') {
 			steps {
-				sh "docker push ttl.sh/${env.TTL_DOCKER_IMAGE}:1h"
+				sh "docker push ${env.TTL_DOCKER_IMAGE}:1h"
 			}
 		}
 		
