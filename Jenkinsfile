@@ -4,13 +4,13 @@ pipeline {
     stages {
 		stage('Build') {
 			steps {
-				sh "docker build -t ttl.sh/${env.DOCKER_IMAGE}:1h ."
+				sh "docker build -t ttl.sh/${env.TTL_DOCKER_IMAGE}:1h ."
 			}
 		}
 
 		stage('Push Docker Image') {
 			steps {
-				sh "docker push ttl.sh/${env.DOCKER_IMAGE}:1h"
+				sh "docker push ttl.sh/${env.TTL_DOCKER_IMAGE}:1h"
 			}
 		}
 		
@@ -23,10 +23,8 @@ pipeline {
         			playbook: 'deploy.yml',
         			inventory: 'inventory',
         			extraVars: [
-        				TARGET_HOST: "${env.TARGET_HOST}",
-        				TARGET_USER: "${env.TARGET_USER}",
         				TARGET_PATH: "${env.TARGET_PATH}",
-        				DOCKER_IMAGE: "${env.DOCKER_IMAGE}"
+        				DOCKER_IMAGE: "${env.TTL_DOCKER_IMAGE}"
         			],
         			vaultCredentialsId: 'ansible_pass'
         		)
